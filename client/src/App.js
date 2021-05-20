@@ -11,14 +11,13 @@ const App = () => {
   })
 
   const setUser = user => {
-    console.log("setUser", user)
-    setState({ ...state, user })
+    setState(prevState => ({ ...prevState, user }))
     localStorage.setItem('user', JSON.stringify(user));
   }
 
   const clearUser = () => {
     localStorage.removeItem('user')
-    setState({ ...state, user: false })
+    setState(prevState => ({ ...prevState, user: false }))
   }
 
   const login = () => {
@@ -30,39 +29,37 @@ const App = () => {
     clearUser()
   }
 
+  // Declare the function here to keep concerns separated
   const getUser = () => {
     helpers.getUser(`${state.baseUrl}/account`,
       user => {
-        console.log(user)
+        setState(prevState => ({ ...prevState, loading: false }))
         setUser(user)
-        setState({ ...state, loading: false })
       },
       error => {
         console.error(error);
-        setState({ ...state, loading: false })
+        setState(prevState => ({ ...prevState, loading: false }))
       }
     )
   }
 
   useEffect(() => {
-    setState({ ...state, loading: true })
+    setState(prevState => ({ ...prevState, loading: true }))
+
     helpers.isLogin(`${state.baseUrl}/islogin`, response => {
-      console.log("RESPONSE", response)
-      setState({ ...state, logged: response })
+      setState(prevState => ({ ...prevState, logged: response }))
       if (response) {
         getUser();
       } else {
         clearUser();
-        setState({ ...state, loading: false })
+        setState(prevState => ({ ...prevState, loading: false }))
       }
     }, error => {
       console.error(error);
-      setState({ ...state, logged: false, loading: false })
-      console.log("We are under the error function. Logged will be false")
+      setState(prevState => ({ ...prevState, logged: false, loading: false }))
     })
   }, [])
 
-  console.log("STATE", state)
   return (
     <div className="App">
       <header className="App-header">
@@ -88,9 +85,10 @@ const App = () => {
 
       {state.user && (
         <header className="App-header">
-          <h1>YOU ARE LOGIN CONGRATULATIONS</h1>
-          <h2>User: { state.user?.displayName || "No User" }</h2>
-          <h2>Email: { state.user?._json?.email || "No Email" }</h2>
+          <h1>YOU ARE LOGGED IN, CONGRATULATIONS</h1>
+          <h2>User: { state.user.displayName || "No User" }</h2>
+          <h2>Email: { state.user._json?.email || "No Email" }</h2>
+          <h2>upn: {state.user.upn}</h2>
         </header>
       )}
     </div>

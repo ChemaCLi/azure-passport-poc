@@ -28,5 +28,5 @@ module.exports = {
   },
   SESSION_SECRET,
   URL_FRONTEND,
-  destroySessionUrl: `https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=${HOST_URL}:${PORT}`
+  destroySessionUrl: `https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=${URL_FRONTEND}`
 };

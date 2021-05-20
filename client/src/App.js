@@ -29,21 +29,21 @@ const App = () => {
     clearUser()
   }
 
-  // Declare the function here to keep concerns separated
-  const getUser = () => {
-    helpers.getUser(`${state.baseUrl}/account`,
-      user => {
-        setState(prevState => ({ ...prevState, loading: false }))
-        setUser(user)
-      },
-      error => {
-        console.error(error);
-        setState(prevState => ({ ...prevState, loading: false }))
-      }
-    )
-  }
-
   useEffect(() => {
+    // Declare the function here to keep concerns separated
+    const getUser = () => {
+      helpers.getUser(`${state.baseUrl}/account`,
+        user => {
+          setState(prevState => ({ ...prevState, loading: false }))
+          setUser(user)
+        },
+        error => {
+          console.error(error);
+          setState(prevState => ({ ...prevState, loading: false }))
+        }
+      )
+    }
+
     setState(prevState => ({ ...prevState, loading: true }))
 
     helpers.isLogin(`${state.baseUrl}/islogin`, response => {
@@ -58,7 +58,7 @@ const App = () => {
       console.error(error);
       setState(prevState => ({ ...prevState, logged: false, loading: false }))
     })
-  }, [])
+  }, [state.baseUrl])
 
   return (
     <div className="App">

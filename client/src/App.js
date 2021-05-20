@@ -58,6 +58,9 @@ const App = () => {
       console.error(error);
       setState(prevState => ({ ...prevState, logged: false, loading: false }))
     })
+
+    // add baseUrl as dependency 'cause we are using it inside the effect, and
+    // it can change (because it's stored in the state)
   }, [state.baseUrl])
 
   return (
